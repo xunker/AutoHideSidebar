@@ -1,7 +1,7 @@
 # Automatically hide the sidebar after the file in the current view is
-# modified XX times (default 5).
+# modified XX times. Automatically show it when tab is saved/closed/opened/etc.
 #
-# Much code borrowed from SyncedSideBar: https://github.com/sobstel/SyncedSideBar
+# Based on code from SyncedSideBar: https://github.com/sobstel/SyncedSideBar
 import sublime, sublime_plugin
 
 PLUGIN_NAME = 'AutoHideSidebar'
