@@ -25,8 +25,13 @@ cause the sidebar to hide.
 Installation
 ------------
 
-Plugin is not yet in package management, so you will need to `git clone` the
-repo in to your ST3 directory for now.
+AutoHideSidebar is not yet in Sublime Package Control so you will need to add
+it manually by downloading `AutoHideSidebar.py` in to the User Packages
+directory. On OS X this defaults to `~/Library/Application Support/Sublime Text 3/Packages/User`
+but may vary on other operating systems.
+
+It has been [submitted to Package Control](https://github.com/wbond/package_control_channel/pull/5133) and will (hopefully)
+be available there soon.
 
 Configuration
 -------------
@@ -133,6 +138,8 @@ Fixed errant logging message that would print to the console regardless of the
 value of `autohide_sidebar_verbose_logging`.
 
 Added documentation on the `autohide_sidebar_verbose_logging` config option.
+
+Submitted to be included in [Sublime Package Control](https://github.com/wbond/package_control_channel/pull/5133).
 
 *1.0*, *July 31, 2014*
 
