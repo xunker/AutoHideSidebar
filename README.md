@@ -1,23 +1,26 @@
 AutoHideSidebar
 ===============
 
-AutoHideSidebar is a [Sublime Text 3](http://www.sublimetext.com/) plugin that
+AutoHideSidebar is a [Sublime Text 3](http://www.sublimetext.com/) package that
 will automatically hide and show the sidebar as you type, save and navigate.
 Untested with ST2, but may work too.
 
-The plugin watches for modifications on the currently open file. After the
-current file is modified by a certian number of keystrokes (defaults to 10)
+AutoHideSidebar watches for modifications on the currently open file. After the
+current file is modified by a certain number of keystrokes (defaults to 10)
 the sidebar will automatically hide.
 
 Once the sidebar is hidden, it will automatically be shown when:
 
-* the current file is saved
-* the current file is closed
-* a new file is created
-* a file is loaded
-* a file is cloned
-* current active file/tab changes
-* the app gains or loses focus
+* The current file is saved.
+* A file is loaded or cloned.
+* A new tab is opened.
+* An open tab is closed.
+* The Current active tab changes.
+* The app gains or loses focus.
+
+Only keystrokes that add, remove or change text in the current tab ("change"
+keystrokes) will hide the sidebar. Other keystrokes, such arrow keys, will not
+cause the sidebar to hide.
 
 Installation
 ------------
@@ -112,8 +115,24 @@ changed like this:
 
 Now the sidebar will not automatically show when a file is closed.
 
+####  autohide_sidebar_verbose_logging
+
+Toggle event and debugging messages being written to the console. Default is
+`false`, can be changed like this:
+
+```json
+{ "autohide_sidebar_verbose_logging": true }
+```
+
 Changelog
 ---------
+
+*1.0.1*, Jan 15, 2016*
+
+Fixed errant logging message that would print to the console regardless of the
+value of `autohide_sidebar_verbose_logging`.
+
+Added documentation on the `autohide_sidebar_verbose_logging` config option.
 
 *1.0*, *July 31, 2014*
 
@@ -122,8 +141,8 @@ Initial release.
 Credit
 ------
 
-Parts of this code are borrowed or based on Przemek Sobstel's 
-[SyncedSideBar](https://github.com/sobstel/SyncedSideBar) plugin.
+Parts of this code are borrowed or based on Przemek Sobstel's
+[SyncedSideBar](https://github.com/sobstel/SyncedSideBar) package.
 
 License
 -------
