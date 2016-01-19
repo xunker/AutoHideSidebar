@@ -25,13 +25,11 @@ cause the sidebar to hide.
 Installation
 ------------
 
-AutoHideSidebar is not yet in Sublime Package Control so you will need to add
-it manually by downloading `AutoHideSidebar.py` in to the User Packages
+You can find the package in Sublime Package Control by searching for "Auto Hide Sidebar".
+
+You can also install it by hand by downloading `AutoHideSidebar.py` in to the User Packages
 directory. On OS X this defaults to `~/Library/Application Support/Sublime Text 3/Packages/User`
 but may vary on other operating systems.
-
-It has been [submitted to Package Control](https://github.com/wbond/package_control_channel/pull/5133) and will (hopefully)
-be available there soon.
 
 Configuration
 -------------
