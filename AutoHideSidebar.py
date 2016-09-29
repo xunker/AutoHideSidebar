@@ -114,11 +114,14 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
       self.show_sidebar_and_reset_count(view)
 
   def show_sidebar_and_reset_count(self, view):
+    # not sure why but on_close/on_new/on_activated are called twice, and one of the times the view.window() is nil
+    if not view.window():
+      return
     self.reset_count(view.window().id())
     self.show_sidebar(view)
 
   def reset_count(self, window_id):
-    log("Resetting counter to zero (trigger is %i)" % change_count_trigger)
+    log("Resetting counter for window %i to zero (trigger is %i)" % (window_id, change_count_trigger))
     set_change_count(window_id, 0)
 
   def hide_sidebar(self, view):
