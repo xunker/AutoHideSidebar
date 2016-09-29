@@ -3,12 +3,13 @@
 #
 # Based on code from SyncedSideBar: https://github.com/sobstel/SyncedSideBar
 import sublime, sublime_plugin
+from collections import defaultdict
 
 PLUGIN_NAME = 'AutoHideSidebar'
 
 CHANGE_COUNT_TRIGGER_KEY = 'hide_sidebar_change_count_trigger'
 change_count_trigger = 10 # default, can be changed in prefs with above key
-change_counter = {}
+change_counter = defaultdict(int)
 
 # preferences key, default value/current calue
 behaviours = {
@@ -34,7 +35,7 @@ def set_change_count(id, count):
 
 def increment_change_count(id):
   global change_counter
-  change_counter[id] = change_counter.get(id, 0) + 1
+  change_counter[id] += 1
   return change_counter[id]
 
 def log(msg):
