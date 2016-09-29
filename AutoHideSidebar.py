@@ -6,10 +6,6 @@ import sublime, sublime_plugin
 
 PLUGIN_NAME = 'AutoHideSidebar'
 
-# assume sidebar is visible by default on every window (there's no way to check, unfortunately)
-DEFAULT_VISIBILITY = True
-windowSidebarVisible = {}
-
 CHANGE_COUNT_TRIGGER_KEY = 'hide_sidebar_change_count_trigger'
 change_count_trigger = 10 # default, can be changed in prefs with above key
 change_counter = 0
@@ -28,6 +24,9 @@ behaviours = {
 def shouldTrigger(pref_key):
   global behaviours
   return not not behaviours[pref_key]
+
+def is_sidebar_visible(window):
+  return window.is_sidebar_visible()
 
 def log(msg):
   if shouldTrigger('autohide_sidebar_verbose_logging'):
@@ -67,11 +66,8 @@ if (int(sublime.version()) < 3000):
 
 class AutoHideSidebarListener(sublime_plugin.EventListener):
   def on_modified_async(self, view):
-    # crufty way to detect if sidebar can even be shown
     if view.window() and len(view.window().folders()) > 0:
-      if not view.window().id() in windowSidebarVisible:
-        windowSidebarVisible[view.window().id()] = DEFAULT_VISIBILITY
-      if windowSidebarVisible[view.window().id()]:
+      if is_sidebar_visible(view.window()):
         global change_counter
         change_counter += 1
         log("change_counter: %i/%i" % (change_counter, change_count_trigger))
@@ -115,12 +111,10 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
     change_counter = 0
 
   def hide_sidebar(self, view):
-    if not view.window().id() in windowSidebarVisible:
-      windowSidebarVisible[view.window().id()] = DEFAULT_VISIBILITY
-    if windowSidebarVisible[view.window().id()]:
+    if is_sidebar_visible(view.window()):
       if view.window():
         log("Hiding sidebar")
-        view.window().run_command("toggle_side_bar")
+        view.window().set_sidebar_visible(False)
       else:
         log("No window, can't show sidebar")
     else:
@@ -128,14 +122,12 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
 
   def show_sidebar(self, view):
     if view.window():
-      if not view.window().id() in windowSidebarVisible:
-        windowSidebarVisible[view.window().id()] = DEFAULT_VISIBILITY
-      if windowSidebarVisible[view.window().id()]:
+      if is_sidebar_visible(view.window()):
         log("Sidebar already visible")
       else:
         if view.window():
           log("Showing sidebar")
-          view.window().run_command("toggle_side_bar")
+          view.window().set_sidebar_visible(True)
         else:
           log("No window, can't show sidebar")
     else:
@@ -145,12 +137,5 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
     # crufty way to detect if sidebar can even be shown
     if len(window.folders()) > 0:
       if command_name == "toggle_side_bar":
-        global windowSidebarVisible
-        if not window.id() in windowSidebarVisible:
-          windowSidebarVisible[window.id()] = DEFAULT_VISIBILITY
-
         log("toggle_side_bar command reported")
-        windowSidebarVisible[window.id()] = not windowSidebarVisible[window.id()]
-        log("sidebarVisible: %s" % windowSidebarVisible[window.id()])
-
         self.reset_count()
