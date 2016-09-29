@@ -68,6 +68,9 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
   def on_modified_async(self, view):
     if view.window() and len(view.window().folders()) > 0:
       if is_sidebar_visible(view.window()):
+        if view.settings().get( "is_widget" ):
+          log("In a quick panel, ignoring keypress")
+          return
         global change_counter
         change_counter += 1
         log("change_counter: %i/%i" % (change_counter, change_count_trigger))
