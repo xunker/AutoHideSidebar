@@ -8,7 +8,7 @@ PLUGIN_NAME = 'AutoHideSidebar'
 
 CHANGE_COUNT_TRIGGER_KEY = 'hide_sidebar_change_count_trigger'
 change_count_trigger = 10 # default, can be changed in prefs with above key
-change_counter = 0
+change_counter = {}
 
 # preferences key, default value/current calue
 behaviours = {
@@ -27,6 +27,15 @@ def shouldTrigger(pref_key):
 
 def is_sidebar_visible(window):
   return window.is_sidebar_visible()
+
+def set_change_count(id, count):
+  global change_counter
+  change_counter[id] = count
+
+def increment_change_count(id):
+  global change_counter
+  change_counter[id] = change_counter.get(id, 0) + 1
+  return change_counter[id]
 
 def log(msg):
   if shouldTrigger('autohide_sidebar_verbose_logging'):
@@ -71,10 +80,9 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
         if view.settings().get( "is_widget" ):
           log("In a quick panel, ignoring keypress")
           return
-        global change_counter
-        change_counter += 1
-        log("change_counter: %i/%i" % (change_counter, change_count_trigger))
-        if change_counter == change_count_trigger:
+        count = increment_change_count(view.window().id())
+        log("change_counter: %i/%i" % (count, change_count_trigger))
+        if count >= change_count_trigger:
           log("change_counter reached maximum of %i." % change_count_trigger)
           self.hide_sidebar(view)
       else:
@@ -105,13 +113,12 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
       self.show_sidebar_and_reset_count(view)
 
   def show_sidebar_and_reset_count(self, view):
-    self.reset_count()
+    self.reset_count(view.window().id())
     self.show_sidebar(view)
 
-  def reset_count(self):
+  def reset_count(self, window_id):
     log("Resetting counter to zero (trigger is %i)" % change_count_trigger)
-    global change_counter
-    change_counter = 0
+    set_change_count(window_id, 0)
 
   def hide_sidebar(self, view):
     if is_sidebar_visible(view.window()):
@@ -141,4 +148,4 @@ class AutoHideSidebarListener(sublime_plugin.EventListener):
     if len(window.folders()) > 0:
       if command_name == "toggle_side_bar":
         log("toggle_side_bar command reported")
-        self.reset_count()
+        self.reset_count(window.id())
